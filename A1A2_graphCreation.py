@@ -51,15 +51,15 @@ journal = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'
 
 keyword = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file5) + ''' AS row CREATE (:Keyword {keywordID: row.keywordID, keyword: row.keyword});'''
 
-graph.run(paper)
+graph.cypher.execute(paper)
 
-graph.run(author)
+graph.cypher.execute(author)
 
-graph.run(proc)
+graph.cypher.execute(proc)
 
-graph.run(journal)
+graph.cypher.execute(journal)
 
-graph.run(keyword)
+graph.cypher.execute(keyword)
 
 print("Nodes successfully created")
 
@@ -100,17 +100,17 @@ includes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"
 
 cited_by = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file11) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (paper_citation:Paper {paperID: row.citedBy}) SET paper.citations = paper.citations + 1 MERGE (paper)-[:CITED_BY]->(paper_citation);'''
 
-graph.run(writes)
+graph.cypher.execute(writes)
 
-graph.run(reviews)
+graph.cypher.execute(reviews)
 
-graph.run(contains)
+graph.cypher.execute(contains)
 
-graph.run(publishes)
+graph.cypher.execute(publishes)
 
-graph.run(includes)
+graph.cypher.execute(includes)
 
-graph.run(cited_by)
+graph.cypher.execute(cited_by)
 
 print("Relationships succesfully created")
 print("You are now ready to start querying your database. ENJOY!")
