@@ -178,7 +178,7 @@ TODO:   control that an author does not review more than once the same paper
         control that an author is not the reviewer of his own paper        
 '''
 
-f = open("./data/reviewedBy_relation.csv","w")
+f = open("./data/reviews_relation.csv","w")
 writer = csv.writer(f)
 for row in reviewList:
     writer.writerow(row)
