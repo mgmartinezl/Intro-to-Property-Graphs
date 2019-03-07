@@ -43,7 +43,7 @@ for pc in range(1,topJournal + 1):
     count = journalCount + pc
     journalList.append([str(count),"Journal #" + str(count)])
 
-f = open("./data/journalsdummy.csv","w")
+f = open("./data/journals.csv","w")
 writer = csv.writer(f)
 for row in journalList:
     writer.writerow(row)
