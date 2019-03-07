@@ -19,6 +19,21 @@ writer = csv.writer(f)
 for row in paperList:
     writer.writerow(row)
 
+#Organization CSV generation
+orgCount = 30000
+orgList =  []
+orgList.append(["ordID","orgName"])
+topOrg = 15
+for c in range(1,topOrg + 1):
+    count = orgCount + c
+    orgList.append([str(count),"Organization #" + str(count)])
+
+f = open("./data/organization.csv","w")
+writer = csv.writer(f)
+for row in orgList:
+    writer.writerow(row)
+
+
 
 #Author CSV generation
 authorCount = 10000
@@ -256,3 +271,30 @@ f = open("./data/includes_relation.csv","w")
 writer = csv.writer(f)
 for row in submittedList:
     writer.writerow(row)
+
+#affiliation
+affiliationList =  []
+affiliationList.append(["authorID","orgID"])
+topAffiliation = 150
+dicAffiliation = {}
+
+for c in range(1,topAffiliation + 1):
+    org = c %  topOrg
+    if org == 0:
+        org = 15
+    org = org + orgCount
+
+    author = random.randint(authorCount,authorCount+topAuthor+1)
+    affiliationList.append([str(org),str(author)])
+
+'''
+TODO:   control that a journal does not contain the same paper more than once
+        control that a paper is not orfan (has either a journal or proceeding associated)
+        control that a paper is not present in a journal and in a proceeding at the same time
+'''
+
+f = open("./data/host_relation.csv","w")
+writer = csv.writer(f)
+for row in affiliationList:
+    writer.writerow(row)
+
