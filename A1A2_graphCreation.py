@@ -13,11 +13,11 @@ file2 = 'author.csv'
 file3 = 'proceedings.csv'
 file4 = 'journalsdummy.csv'
 file5 = 'keywords.csv'
-file6 = 'writtenBy_relation.csv'
+file6 = 'writes_relation.csv'
 file7 = 'reviewedBy_relation.csv'
 file8 = 'contains_relation.csv'
-file9 = 'publishedIn_relation.csv'
-file10 = 'submittedTo_relation.csv'
+file9 = 'publishes_relation.csv'
+file10 = 'includes_relation.csv'
 file11 = 'citedBy_relation.csv'
 
 print("Connection established to server 7474")
@@ -29,7 +29,7 @@ MATCH (n)
 OPTIONAL MATCH (n)-[r]-()
 DELETE n,r
 '''
-graph.run(restartNeo4j)
+graph.cypher.execute(restartNeo4j)
 
 print("Database successfully dropped")
 

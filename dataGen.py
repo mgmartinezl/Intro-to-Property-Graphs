@@ -128,7 +128,7 @@ for c in range(1,topCited+1):
 TODO: control that a author does not appear more than once as a writer of a paper
 '''
 
-f = open("./data/writtenBy_relation.csv","w")
+f = open("./data/writes_relation.csv","w")
 writer = csv.writer(f)
 for row in writtenList:
     writer.writerow(row)
@@ -219,7 +219,7 @@ TODO:   control that a journal does not contain the same paper more than once
         control that a paper is not present in a journal and in a proceeding at the same time
 '''
 
-f = open("./data/publishedIn_relation.csv","w")
+f = open("./data/publishes_relation.csv","w")
 writer = csv.writer(f)
 for row in publishedList:
     writer.writerow(row)
@@ -252,7 +252,7 @@ TODO:   control that a proceeding does not contain the same paper more than once
         control that day is in the limits of days within the corresponding month (febreaury < 29 for ins)
 '''
 
-f = open("./data/submittedTo_relation.csv","w")
+f = open("./data/includes_relation.csv","w")
 writer = csv.writer(f)
 for row in submittedList:
     writer.writerow(row)
