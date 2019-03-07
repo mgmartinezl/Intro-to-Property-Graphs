@@ -68,19 +68,19 @@ print("Nodes successfully created")
 print("Indexes being created...")
 
 i1 = '''CREATE INDEX ON :Paper(paperID);'''
-graph.run(i1)
+graph.cypher.execute(i1)
 
 i2 = '''CREATE INDEX ON :Author(authorID);'''
-graph.run(i2)
+graph.cypher.execute(i2)
 
 i3 = '''CREATE INDEX ON :Keyword(keywordID);'''
-graph.run(i3)
+graph.cypher.execute(i3)
 
 i4 = '''CREATE INDEX ON :Journal(journalID);'''
-graph.run(i4)
+graph.cypher.execute(i4)
 
 i5 = '''CREATE INDEX ON :Proceeding(proceedingID);'''
-graph.run(i5)
+graph.cypher.execute(i5)
 
 print("Indexes successfully created")
 
