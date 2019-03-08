@@ -6,7 +6,7 @@ import csv
 paperCount = 20000
 paperList =  []
 paperList.append(["paperID","paperTitle","citedBy","abstract"])
-topPaper = 500
+topPaper = 800
 for pc in range(1,topPaper + 1):
     count = paperCount + pc
     citedBy = count
@@ -84,9 +84,17 @@ keywordList =  []
 keywordList.append(["keywordID","keyword"])
 topKeyword = 50
 
+keywords = ["data management", "indexing", "data modeling", "big data", "data processing", "data storage","data querying"
+    ,"health informatics","HL7", "FHIR", "OPENEHR","interoperability","cloud computing","saas", "IA", "machine learning", "visual analytics"
+    ,"data warehouse","sql","mongoDB"]
+
 for pc in range(1,topKeyword + 1):
     count = keywordCount + pc
-    keywordList.append([str(count),"Keyword #" + str(count)])
+    if (pc <= 20):
+        keywordList.append([str(count), keywords[pc-1]])
+    else:
+        keywordList.append([str(count), "Keyword #" + str(count)])
+
 
 f = open("./data/keywords.csv","w")
 writer = csv.writer(f)
@@ -101,7 +109,7 @@ topCited = 3501
 for c in range(1,topCited):
     paper = c %  topPaper
     if paper == 0:
-        paper = 500
+        paper = topPaper
     paper = paper + paperCount
     cited = paper
     while (paper == cited):
@@ -128,7 +136,7 @@ dicMain = {}
 for c in range(1,topCited+1):
     paper = c %  topPaper
     if paper == 0:
-        paper = 500
+        paper = topPaper
     if str(paper) not in dicMain:
         main = "Yes"
         dicMain[str(paper)] = "Yes"
@@ -158,7 +166,7 @@ dicReview = {}
 for c in range(1,topReview + 1):
     paper = c %  topPaper
     if paper == 0:
-        paper = 500
+        paper = topPaper
 
     paper = paper + paperCount
     decisionProb = random.randint(0, 6)
@@ -194,10 +202,15 @@ dicContain = {}
 for c in range(1,topContain + 1):
     paper = c %  topPaper
     if paper == 0:
-        paper = 500
+        paper = topPaper
     paper = paper + paperCount
 
-    keyword = random.randint(keywordCount,keywordCount+topKeyword+1)
+    probKeyword = random.randint(0, 10)
+    if (probKeyword < 8):
+        #consider only keyword index from 0 to 7
+        keyword = probKeyword
+    else:
+        keyword = random.randint(keywordCount,keywordCount+topKeyword+1)
 
     containList.append([str(paper),str(keyword)])
 
@@ -214,16 +227,16 @@ for row in containList:
 #published_in
 publishedList =  []
 publishedList.append(["paperID","journalID", "volume", "year"])
-topPublished = 500
+topPublished = int(topPaper / 2)
 dicPublished = {}
 
 for c in range(1,topPublished + 1):
     journal = c %  topJournal
     if journal == 0:
-        journal = 25
+        journal = topJournal
     journal = journal + journalCount
 
-    paper = random.randint(paperCount,paperCount+topPaper+1)
+    paper = random.randint(paperCount,paperCount+int(topPaper/2)+1)
     volume = random.randint(1,21)
     year = random.randint(2010,2021)
     publishedList.append([str(paper),str(journal),volume,year])
@@ -240,19 +253,19 @@ for row in publishedList:
     writer.writerow(row)
 
 
-#submitted_to
+#includes_relation
 submittedList =  []
 submittedList.append(["paperID","proceedingID", "edition", "venue", "year", "month", "day"])
-topSubmitted = 500
+topSubmitted = int(topPaper / 2)
 dicSubmitted = {}
 
 for c in range(1,topSubmitted + 1):
     proceeding = c %  topProceeding
     if proceeding == 0:
-        proceeding = 25
+        proceeding = topProceeding
     proceeding = proceeding + proceedingCount
 
-    paper = random.randint(paperCount,paperCount+topPaper+1)
+    paper = random.randint(paperCount+int(topPaper/2),paperCount+topPaper+1)
     edition = random.randint(1,21)
     year = random.randint(2010,2021)
     month = random.randint(1, 12)
@@ -281,7 +294,7 @@ dicAffiliation = {}
 for c in range(1,topAffiliation + 1):
     org = c %  topOrg
     if org == 0:
-        org = 15
+        org = topOrg
     org = org + orgCount
 
     author = random.randint(authorCount,authorCount+topAuthor+1)
