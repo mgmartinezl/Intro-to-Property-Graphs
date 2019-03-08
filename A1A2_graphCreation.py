@@ -7,7 +7,7 @@ import sys
 graph = Graph()
 
 path = "file:"+sys.argv[1]
-
+#path = "data/"
 file1 = 'paper.csv'
 file2 = 'author.csv'
 file3 = 'proceedings.csv'
@@ -37,17 +37,13 @@ print("Database successfully dropped")
 
 print("Nodes will start being created")
 
-
 paper = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file1) + ''' AS row CREATE (:Paper{paperID:row.paperID, paperTitle:row.paperTitle, citedBy:row.citedBy, abstract:row.abstract,citations: 0});'''
-
 
 author = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file2) + ''' AS row CREATE (:Author {authorID: row.authorID, authorName: row.authorName});'''
 
+proc = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file3) + ''' AS row CREATE (:Proceeding {proceedingID: row.proceedingID, proceedingName: row.proceedingName, totalPapers: 0});'''
 
-proc = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file3) + ''' AS row CREATE (:Proceeding {proceedingID: row.proceedingID, proceedingName: row.proceedingName});'''
-
-journal = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file4) + ''' AS row CREATE (:Journal {journalID: row.journalID, journalName: row.journalName});'''
-
+journal = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file4) + ''' AS row CREATE (:Journal {journalID: row.journalID, journalName: row.journalName, totalPapers: 0});'''
 
 keyword = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file5) + ''' AS row CREATE (:Keyword {keywordID: row.keywordID, keyword: row.keyword});'''
 
@@ -94,9 +90,9 @@ reviews = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'
 
 contains = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file8) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (kw:Keyword {keywordID: row.keywordID}) MERGE (paper)-[:CONTAINS]->(kw);'''
 
-publishes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file9) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (journal:Journal {journalID: row.journalID}) MERGE (paper)<-[:PUBLISHES {volume: row.volume, year: row.year}]-(journal);'''
+publishes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file9) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (journal:Journal {journalID: row.journalID}) SET journal.totalPapers = journal.totalPapers + 1 MERGE (paper)<-[:PUBLISHES {volume: row.volume, year: row.year}]-(journal);'''
 
-includes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file10) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (proceeding:Proceeding {proceedingID: row.proceedingID}) MERGE (paper)<-[:INCLUDES {edition: row.edition, venue: row.venue, year: row.year, month: row.month, day: row.day}]-(proceeding);'''
+includes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file10) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (proceeding:Proceeding {proceedingID: row.proceedingID}) SET proceeding.totalPapers = proceeding.totalPapers + 1 MERGE (paper)<-[:INCLUDES {edition: row.edition, venue: row.venue, year: row.year, month: row.month, day: row.day}]-(proceeding);'''
 
 cited_by = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file11) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (paper_citation:Paper {paperID: row.citedBy}) SET paper.citations = paper.citations + 1 MERGE (paper)-[:CITED_BY]->(paper_citation);'''
 

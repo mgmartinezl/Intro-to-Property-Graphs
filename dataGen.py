@@ -204,14 +204,16 @@ for c in range(1,topContain + 1):
     if paper == 0:
         paper = topPaper
     paper = paper + paperCount
+    keyword = keywordCount + random.randint(0, 8)
 
+
+    '''
     probKeyword = random.randint(0, 10)
     if (probKeyword < 8):
-        #consider only keyword index from 0 to 7
         keyword = probKeyword
     else:
         keyword = random.randint(keywordCount,keywordCount+topKeyword+1)
-
+    '''
     containList.append([str(paper),str(keyword)])
 
 '''
