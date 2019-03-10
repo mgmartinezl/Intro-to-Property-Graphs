@@ -19,7 +19,6 @@ print("New nodes will start being created")
 
 organizations = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file1) + ''' AS row CREATE (:Organization {orgID: row.ordID, orgName: row.orgName});'''
 
-#graph.cypher.execute(organizations)
 graph.cypher.execute(organizations)
 
 print("Node organization was successfully created")
@@ -28,7 +27,6 @@ print("Node organization was successfully created")
 
 hosts = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file2) + ''' AS row MATCH (author:Author {authorID: row.authorID}) MATCH (organization:Organization {orgID: row.orgID}) MERGE (author)<-[:HOSTS]-(organization)'''
 
-#graph.cypher.execute(hosts)
 graph.cypher.execute(hosts)
 
 print("Relationship host was created successfully")
@@ -36,7 +34,6 @@ print("Relationship host was created successfully")
 #Delete reviewing relationship and create it again with new attributes
 
 delete_rel = '''MATCH ()-[r:REVIEWS]-() DELETE r'''
-#graph.cypher.execute(delete_rel)
 graph.cypher.execute(delete_rel)
 
 reviews = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file3) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (author:Author {authorID: row.authorID}) MERGE (paper)<-[:REVIEWS {review: row.review, decision: row.decision}]-(author);'''

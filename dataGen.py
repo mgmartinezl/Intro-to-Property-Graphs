@@ -3,6 +3,7 @@ import csv
 
 
 #Paper CSV generation
+
 paperCount = 20000
 paperList =  []
 paperList.append(["paperID","paperTitle","citedBy","abstract"])
@@ -19,7 +20,9 @@ writer = csv.writer(f)
 for row in paperList:
     writer.writerow(row)
 
+
 #Organization CSV generation
+
 orgCount = 30000
 orgList =  []
 orgList.append(["ordID","orgName"])
@@ -34,8 +37,8 @@ for row in orgList:
     writer.writerow(row)
 
 
-
 #Author CSV generation
+
 authorCount = 10000
 authorList =  []
 authorList.append(["authorID","authorName"])
@@ -50,6 +53,7 @@ for row in authorList:
     writer.writerow(row)
 
 #Journal CSV
+
 journalCount = 60000
 journalList =  []
 journalList.append(["journalID","journalName"])
@@ -63,7 +67,9 @@ writer = csv.writer(f)
 for row in journalList:
     writer.writerow(row)
 
+
 #Proceeding CSV
+
 proceedingCount = 50000
 proceedingList =  []
 proceedingList.append(["proceedingID","proceedingName"])
@@ -78,7 +84,9 @@ writer = csv.writer(f)
 for row in proceedingList:
     writer.writerow(row)
 
+
 #Keyword CSV
+
 keywordCount = 50000
 keywordList =  []
 keywordList.append(["keywordID","keyword"])
@@ -101,7 +109,9 @@ writer = csv.writer(f)
 for row in keywordList:
     writer.writerow(row)
 
+
 #CitedBy csv
+
 citedList =  []
 citedList.append(["paperID","citedBy"])
 topCited = 3501
@@ -125,6 +135,7 @@ f = open("./data/citedBy_relation.csv","w")
 writer = csv.writer(f)
 for row in citedList:
     writer.writerow(row)
+
 
 #written_by csv
 
@@ -155,6 +166,7 @@ f = open("./data/writes_relation.csv","w")
 writer = csv.writer(f)
 for row in writtenList:
     writer.writerow(row)
+
 
 #reviwed_by
 
@@ -227,6 +239,7 @@ for row in containList:
 
 
 #published_in
+
 publishedList =  []
 publishedList.append(["paperID","journalID", "volume", "year"])
 topPublished = int(topPaper / 2)
@@ -256,6 +269,7 @@ for row in publishedList:
 
 
 #includes_relation
+
 submittedList =  []
 submittedList.append(["paperID","proceedingID", "edition", "venue", "year", "month", "day"])
 topSubmitted = int(topPaper / 2)
@@ -288,8 +302,9 @@ for row in submittedList:
     writer.writerow(row)
 
 #affiliation
+
 affiliationList =  []
-affiliationList.append(["authorID","orgID"])
+affiliationList.append(["orgID","authorID"])
 topAffiliation = 150
 dicAffiliation = {}
 

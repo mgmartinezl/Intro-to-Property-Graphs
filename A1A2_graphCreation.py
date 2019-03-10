@@ -64,25 +64,25 @@ print("Nodes successfully created")
 print("Indexes being created...")
 
 i1 = '''CREATE INDEX ON :Paper(paperID);'''
-graph.cypher.execute(i1)
+#graph.cypher.execute(i1)
 
 i2 = '''CREATE INDEX ON :Author(authorID);'''
-graph.cypher.execute(i2)
+#graph.cypher.execute(i2)
 
 i3 = '''CREATE INDEX ON :Keyword(keywordID);'''
-graph.cypher.execute(i3)
+#graph.cypher.execute(i3)
 
 i4 = '''CREATE INDEX ON :Journal(journalID);'''
-graph.cypher.execute(i4)
+#graph.cypher.execute(i4)
 
 i5 = '''CREATE INDEX ON :Proceeding(proceedingID);'''
-graph.cypher.execute(i5)
+#graph.cypher.execute(i5)
 
 print("Indexes successfully created")
 
 #Create relationships between nodes
 
-print("Relatioships will start being created")
+print("Relationships will start being created")
 
 writes = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file6) + ''' AS row MATCH (paper:Paper {paperID: row.paperID}) MATCH (author:Author {authorID: row.authorID}) MERGE (paper)<-[:WRITES {main_author: row.main}]-(author);'''
 
