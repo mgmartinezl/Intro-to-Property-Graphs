@@ -37,7 +37,7 @@ print("Database successfully dropped")
 
 print("Nodes will start being created")
 
-paper = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file1) + ''' AS row CREATE (:Paper{paperID:row.paperID, paperTitle:row.paperTitle, citedBy:row.citedBy, abstract:row.abstract,citations: 0});'''
+paper = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file1) + ''' AS row CREATE (:Paper{paperID:row.paperID, paperTitle:row.paperTitle, citations: 0});'''
 
 author = '''USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM ''' + '''"{0}{1}"'''.format(path, file2) + ''' AS row CREATE (:Author {authorID: row.authorID, authorName: row.authorName});'''
 
@@ -64,19 +64,19 @@ print("Nodes successfully created")
 print("Indexes being created...")
 
 i1 = '''CREATE INDEX ON :Paper(paperID);'''
-#graph.cypher.execute(i1)
+graph.cypher.execute(i1)
 
 i2 = '''CREATE INDEX ON :Author(authorID);'''
-#graph.cypher.execute(i2)
+graph.cypher.execute(i2)
 
 i3 = '''CREATE INDEX ON :Keyword(keywordID);'''
-#graph.cypher.execute(i3)
+graph.cypher.execute(i3)
 
 i4 = '''CREATE INDEX ON :Journal(journalID);'''
-#graph.cypher.execute(i4)
+graph.cypher.execute(i4)
 
 i5 = '''CREATE INDEX ON :Proceeding(proceedingID);'''
-#graph.cypher.execute(i5)
+graph.cypher.execute(i5)
 
 print("Indexes successfully created")
 
