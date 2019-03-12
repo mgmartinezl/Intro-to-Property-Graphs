@@ -335,7 +335,7 @@ for c in range(1,topAuthor + 1):
     author = c % topAuthor
     if author == 0:
         author = topAuthor
-    author = author + topAuthor
+    author = author + authorCount
 
     org = c %  topOrg
     if org == 0:
