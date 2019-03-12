@@ -2,12 +2,13 @@
 
 from py2neo import Graph
 import sys
+import os
 
 
 graph = Graph()
 
-path = "file:"+sys.argv[1]
-#path = "data/"
+#path = "file:"+sys.argv[1]
+path = "file:"+os.getcwd()+"/data/"
 file1 = 'paper.csv'
 file2 = 'author.csv'
 file3 = 'proceedings.csv'

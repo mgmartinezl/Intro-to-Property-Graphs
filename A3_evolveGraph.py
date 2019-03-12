@@ -2,10 +2,12 @@
 
 from py2neo import Graph
 import sys
+import os
 
 graph = Graph()
 
-path = "file:"+sys.argv[1]
+#path = "file:"+sys.argv[1]
+path = "file:"+os.getcwd()+"/data/"
 
 file1 = 'organization.csv'
 file2 = 'host_relation.csv'
