@@ -1,20 +1,20 @@
 import random
 import csv
 
+####################nodes######################
 
 #Paper CSV generation
 
 paperCount = 20000
 paperList =  []
 paperList.append(["paperID","paperTitle","citedBy","abstract"])
-topPaper = 800
-for pc in range(1,topPaper + 1):
-    count = paperCount + pc
+topPaper = 2000
+for c in range(1,topPaper + 1):
+    count = paperCount + c
     citedBy = count
     while (citedBy == count):
         citedBy = random.randint(paperCount,paperCount+topPaper)
     paperList.append([str(count),"Paper #" + str(count), str(citedBy),"Abstract #" +str(count)])
-
 f = open("./data/paper.csv","w")
 writer = csv.writer(f)
 for row in paperList:
@@ -87,7 +87,7 @@ for row in proceedingList:
 
 #Keyword CSV
 
-keywordCount = 50000
+keywordCount = 40000
 keywordList =  []
 keywordList.append(["keywordID","keyword"])
 topKeyword = 50
@@ -109,27 +109,40 @@ writer = csv.writer(f)
 for row in keywordList:
     writer.writerow(row)
 
+####################relations######################
 
 #CitedBy csv
 
 citedList =  []
 citedList.append(["paperID","citedBy"])
-topCited = 3501
-
-for c in range(1,topCited):
-    paper = c %  topPaper
+topCited = topPaper * 7
+alreadyCited = {}
+for c in range(1,topCited + 1):
+    '''paper = c %  topPaper
     if paper == 0:
         paper = topPaper
     paper = paper + paperCount
+'''
+    paper = random.randint(paperCount+1, paperCount + topPaper)
+
+    if not paper in alreadyCited.keys():
+        alreadyCited[paper]=[]
+
     cited = paper
-    while (paper == cited):
-        cited = random.randint(paperCount,paperCount+topPaper+1)
+    already = True
+    '''
+    Control that a paper is not cited twice in the same paper and the cited paper is different than the citing paper
+    '''
+    while (paper == cited or already):
+        cited = random.randint(paperCount+1,paperCount+topPaper)
+        if cited in alreadyCited[paper]:
+            already = True
+        else:
+            already = False
+            alreadyCited[paper].append(cited)
 
     citedList.append([str(paper),str(cited)])
 
-'''
-TODO: control that a paper is not cited more than once in the same paper
-'''
 
 f = open("./data/citedBy_relation.csv","w")
 writer = csv.writer(f)
@@ -137,30 +150,40 @@ for row in citedList:
     writer.writerow(row)
 
 
-#written_by csv
+#writes csv
 
 writtenList =  []
 writtenList.append(["paperID","authorID","main"])
-topCited = 2000
-dicMain = {}
-
-for c in range(1,topCited+1):
+topWrites = topPaper * 3
+dicMain = []
+authorWrites = {}
+for c in range(1,topWrites+1):
     paper = c %  topPaper
     if paper == 0:
         paper = topPaper
-    if str(paper) not in dicMain:
+    if paper not in dicMain:
         main = "Yes"
-        dicMain[str(paper)] = "Yes"
+        dicMain.append(paper)
     else:
         main = "No"
     paper = paper + paperCount
-    written = random.randint(authorCount,authorCount+topAuthor+1)
+    if paper not in authorWrites.keys():
+        authorWrites[paper]=[]
 
-    writtenList.append([str(paper),str(written),main])
+    '''
+    Control that a author does not appear more than once as a writer of a paper
+    '''
+    already = True
+    while already:
+        writer = random.randint(authorCount+1,authorCount+topAuthor)
+        if writer in authorWrites[paper]:
+            already=True
+        else:
+            already=False
+            authorWrites[paper].append(writer)
 
-'''
-TODO: control that a author does not appear more than once as a writer of a paper
-'''
+    writtenList.append([str(paper),str(writer),main])
+
 
 f = open("./data/writes_relation.csv","w")
 writer = csv.writer(f)
@@ -168,11 +191,11 @@ for row in writtenList:
     writer.writerow(row)
 
 
-#reviwed_by
+#reviews
 
 reviewList =  []
 reviewList.append(["paperID","authorID","review","decision"])
-topReview = 1500
+topReview = topPaper * 3
 dicReview = {}
 
 for c in range(1,topReview + 1):
@@ -189,14 +212,16 @@ for c in range(1,topReview + 1):
         decision = "Denied"
         review = "Bad bad..."
 
-    reviewer = random.randint(authorCount,authorCount+topAuthor+1)
+    if paper not in dicReview.keys():
+        dicReview[paper]=[]
 
+    reviewer = random.randint(authorCount+1,authorCount+topAuthor)
+    #A reviewer should not be the author of the paper nor is already a reviewer of the paper
+    while reviewer in authorWrites[paper] or reviewer in dicReview[paper]:
+        reviewer = random.randint(authorCount+1, authorCount + topAuthor)
+    dicReview[paper].append(reviewer)
     reviewList.append([str(paper),str(reviewer),review,decision])
 
-'''
-TODO:   control that an author does not review more than once the same paper
-        control that an author is not the reviewer of his own paper        
-'''
 
 f = open("./data/reviews_relation.csv","w")
 writer = csv.writer(f)
@@ -208,7 +233,7 @@ for row in reviewList:
 
 containList =  []
 containList.append(["paperID","keywordID"])
-topContain = 2000
+topContain = topPaper * 4
 dicContain = {}
 
 for c in range(1,topContain + 1):
@@ -216,9 +241,14 @@ for c in range(1,topContain + 1):
     if paper == 0:
         paper = topPaper
     paper = paper + paperCount
-    keyword = keywordCount + random.randint(0, 8)
 
+    if paper not in dicContain.keys():
+        dicContain[paper]= []
 
+    keyword = keywordCount + random.randint(1, 8)
+    while keyword in dicContain:
+        keyword = keywordCount + random.randint(1, 8)
+    dicContain[paper].append(keyword)
     '''
     probKeyword = random.randint(0, 10)
     if (probKeyword < 8):
@@ -228,9 +258,6 @@ for c in range(1,topContain + 1):
     '''
     containList.append([str(paper),str(keyword)])
 
-'''
-TODO:   control that a paper does not contain the same keyword more than once
-'''
 
 f = open("./data/contains_relation.csv","w")
 writer = csv.writer(f)
@@ -246,21 +273,21 @@ topPublished = int(topPaper / 2)
 dicPublished = {}
 
 for c in range(1,topPublished + 1):
-    journal = c %  topJournal
+
+    paper = c %  topPublished
+    if paper == 0:
+        paper = topPublished
+    paper = paper + paperCount
+
+    journal = c % topJournal
     if journal == 0:
         journal = topJournal
     journal = journal + journalCount
 
-    paper = random.randint(paperCount,paperCount+int(topPaper/2)+1)
     volume = random.randint(1,21)
     year = random.randint(2010,2021)
     publishedList.append([str(paper),str(journal),volume,year])
 
-'''
-TODO:   control that a journal does not contain the same paper more than once
-        control that a paper is not orfan (has either a journal or proceeding associated)
-        control that a paper is not present in a journal and in a proceeding at the same time
-'''
 
 f = open("./data/publishes_relation.csv","w")
 writer = csv.writer(f)
@@ -272,16 +299,21 @@ for row in publishedList:
 
 submittedList =  []
 submittedList.append(["paperID","proceedingID", "edition", "venue", "year", "month", "day"])
-topSubmitted = int(topPaper / 2)
+baseSubmitted = int(topPaper / 2)
 dicSubmitted = {}
 
-for c in range(1,topSubmitted + 1):
+for c in range(baseSubmitted + 1,topPaper + 1):
+
+    paper = c%topPaper
+    if paper == 0:
+        paper = topPaper
+    paper = paper + paperCount
+
     proceeding = c %  topProceeding
     if proceeding == 0:
         proceeding = topProceeding
     proceeding = proceeding + proceedingCount
 
-    paper = random.randint(paperCount+int(topPaper/2),paperCount+topPaper+1)
     edition = random.randint(1,21)
     year = random.randint(2010,2021)
     month = random.randint(1, 12)
@@ -289,12 +321,6 @@ for c in range(1,topSubmitted + 1):
     venue = "City ###"
     submittedList.append([str(paper),str(proceeding),edition,venue,year,month,day])
 
-'''
-TODO:   control that a proceeding does not contain the same paper more than once
-        control that a paper is not orfan (has either a journal or proceeding associated)
-        control that a paper is not present in a journal and in a proceeding at the same time
-        control that day is in the limits of days within the corresponding month (febreaury < 29 for ins)
-'''
 
 f = open("./data/includes_relation.csv","w")
 writer = csv.writer(f)
@@ -305,23 +331,21 @@ for row in submittedList:
 
 affiliationList =  []
 affiliationList.append(["orgID","authorID"])
-topAffiliation = 150
 dicAffiliation = {}
 
-for c in range(1,topAffiliation + 1):
+for c in range(1,topAuthor + 1):
+    author = c % topAuthor
+    if author == 0:
+        author = topAuthor
+    author = author + topAuthor
+
     org = c %  topOrg
     if org == 0:
         org = topOrg
     org = org + orgCount
 
-    author = random.randint(authorCount,authorCount+topAuthor+1)
     affiliationList.append([str(org),str(author)])
 
-'''
-TODO:   control that a journal does not contain the same paper more than once
-        control that a paper is not orfan (has either a journal or proceeding associated)
-        control that a paper is not present in a journal and in a proceeding at the same time
-'''
 
 f = open("./data/host_relation.csv","w")
 writer = csv.writer(f)
