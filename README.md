@@ -7,4 +7,4 @@
 * Use the script A1A2_graphCreation.py to perform the bulk load from the CSV files into the neo4j graph database.
 
 ###A3
-* Use the A3_evolveGraph.py to "evolve" the graph and creates the additional nodes/relationships
+* Use the A3_evolveGraph.py to "evolve" the graph and create the additional nodes/relationships
