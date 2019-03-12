@@ -8,6 +8,7 @@ import csv
 paperCount = 20000
 paperList =  []
 paperList.append(["paperID","paperTitle","citedBy","abstract"])
+#Indicates how many papers will be generated.
 topPaper = 2000
 for c in range(1,topPaper + 1):
     count = paperCount + c
