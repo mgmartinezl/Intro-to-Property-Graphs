@@ -7,15 +7,12 @@ import csv
 
 paperCount = 20000
 paperList =  []
-paperList.append(["paperID","paperTitle","citedBy","abstract"])
+paperList.append(["paperID","paperTitle"])
 #Indicates how many papers will be generated.
 topPaper = 2000
 for c in range(1,topPaper + 1):
     count = paperCount + c
-    citedBy = count
-    while (citedBy == count):
-        citedBy = random.randint(paperCount,paperCount+topPaper)
-    paperList.append([str(count),"Paper #" + str(count), str(citedBy),"Abstract #" +str(count)])
+    paperList.append([str(count),"Paper #" + str(count)])
 f = open("./data/paper.csv","w")
 writer = csv.writer(f)
 for row in paperList:
